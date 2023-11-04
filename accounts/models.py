@@ -34,3 +34,6 @@ class CustomUser(AbstractUser):
             return self.first_name
         return self.email
 
+class Seller(models.Model):
+    profile = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    card_info = models.CharField(max_length=200, null=True, blank=True)
