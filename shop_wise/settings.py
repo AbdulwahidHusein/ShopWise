@@ -37,7 +37,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'accounts',
+    'items',
+    'carts',
+    'shops',
+    'transactions',
+     'drf_yasg',#documentation
+     
 ]
+SWAGGER_SETTINGS = {
+    'DEFAULT_INFO': 'shop_wise.urls.api_info',
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
