@@ -1,9 +1,11 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from .views import ItemView
 
 app_name = 'items'
+router = DefaultRouter()
+router.register("", ItemView, basename="item")
 
 urlpatterns = [
-    path('list', ItemView.as_view({'get': 'list', 'post': 'create'}), name='accounts-list'),
-    path('item/<int:pk>/', ItemView.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}), name='accounts-detail'),
+    path("", include(router.urls), name="items"),
 ]
