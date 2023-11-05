@@ -33,6 +33,6 @@ urlpatterns = [
     path('api/', include('rest_framework.urls')),
     path("accounts/", include("accounts.urls")),
     path("items/", include("items.urls")),
-    path("shops", include("shops.urls") ),
+    path("shops/", include("shops.urls") ),
     
 ]
