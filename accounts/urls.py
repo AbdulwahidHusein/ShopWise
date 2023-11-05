@@ -7,6 +7,7 @@ app_name = 'accounts'
 router = DefaultRouter()
 router.register('users', CustomUserViewSet, basename='user')
 
+
 urlpatterns = [
     path('', include(router.urls), name='accounts-list'),
 ]
