@@ -1,9 +1,12 @@
-from django.urls import path
-from .views import CustomUserView
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import CustomUserViewSet
 
 app_name = 'accounts'
 
+router = DefaultRouter()
+router.register('users', CustomUserViewSet, basename='user')
+
 urlpatterns = [
-    path('accounts_list', CustomUserView.as_view({'get': 'list'}), name='accounts-list'),
-    path('account/<int:pk>/', CustomUserView.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}), name='accounts-detail'),
+    path('', include(router.urls), name='accounts-list'),
 ]
