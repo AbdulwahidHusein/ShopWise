@@ -11,4 +11,3 @@ class Item(models.Model):
 class ItemImage(models.Model):
     image = models.ImageField(upload_to="items/images", null=True, blank=True)
     item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name="images")
-    
