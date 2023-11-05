@@ -4,6 +4,7 @@ from .serializers import ItemSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import  permissions
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from custom_permissions import IsUserItemOwner
 from shops.models import Shop
 from django.core.exceptions import ObjectDoesNotExist
@@ -16,7 +17,7 @@ class ItemView(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get_permissions(self):
         permission_classes = []
-        if self.request.method in ['DELETE', 'PUT', 'PATCH', 'POST']:
+        if self.request.method in ['DELETE', 'PUT', 'PATCH']:
             permission_classes.append(permissions.IsAuthenticated)
             # Allow only the item creator to delete, update, or partially update the item
             permission_classes.append(IsUserItemOwner)
@@ -34,3 +35,7 @@ class ItemView(viewsets.ModelViewSet):
         # Filter the queryset to show only items created by the authenticated user
         user_id = self.request.user.id
         return Item.objects.filter(shop__seller__id=user_id)
+    
+    @action(detail=False, methods=["GET"])
+    def get_all_items(self):
+        pass
