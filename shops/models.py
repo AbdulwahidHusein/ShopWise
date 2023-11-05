@@ -13,6 +13,6 @@ class Shop(models.Model):
         (CHOICE_C, 'catagory c'),
     ]
     catagory = models.CharField(max_length=100, choices=catagories)
-    seller = models.OneToOneField(Seller, related_name="seller", on_delete=models.PROTECT)
+    seller = models.OneToOneField(Seller, related_name="seller", on_delete=models.SET_NULL, null=True, blank=True)
     def __str__(self) -> str:
         return self.seller.profile.email +" "+ self.catagory

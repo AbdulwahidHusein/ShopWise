@@ -23,9 +23,16 @@ from .serializers import CustomUserSerializer, CustomUserRegistrationSerializer,
 
 class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
     permission_classes = [permissions.AllowAny]
-
+    
+    def get_serializer_class(self):
+        if self.action == 'login':
+            return CustomUserLoginSerializer
+        elif self.action == 'register':
+            return CustomUserRegistrationSerializer
+        else:
+            return CustomUserSerializer
+        
     @action(detail=False, methods=['post'])
     def login(self, request):
         serializer = CustomUserLoginSerializer(data=request.data)
