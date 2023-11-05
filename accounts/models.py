@@ -37,3 +37,7 @@ class CustomUser(AbstractUser):
 class Seller(models.Model):
     profile = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     card_info = models.CharField(max_length=200, null=True, blank=True)
+
+class Buyer(models.Model):
+    profile = models.ForeignKey(CustomUser, on_delete=models.PROTECT)
+    card_info = models.CharField(max_length=200, null=True, blank=True)
