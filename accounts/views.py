@@ -44,9 +44,9 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         return Response({
             'refresh': str(refresh),
             'access': str(refresh.access_token),
-            'first_name':self.request.user.first_name,
-            'last_name':self.request.user.last_name,
-            'email':self.request.user.username,
+            'first_name':user.first_name,
+            'last_name':user.last_name,
+            'email':user.username,
         })
 
     @action(detail=False, methods=['post'])

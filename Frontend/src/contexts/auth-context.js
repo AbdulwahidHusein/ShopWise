@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useReducer, useRef } from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
+import {setAccessTokenCookie} from '../cookieUtils';
 
 const HANDLERS = {
   INITIALIZE: 'INITIALIZE',
@@ -127,40 +129,37 @@ export const AuthProvider = (props) => {
     });
   };
 
+  
+
   const signIn = async (values, helpers) => {
-
-
     try {
       const formData = new FormData();
       formData.append('username', values.email);
       formData.append('password', values.password);
-
-      const response = await fetch('http://127.0.0.1:8000/accounts/login/', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (response.ok) {
-        const data = await response.json();
+  
+      const response = await axios.post('http://127.0.0.1:8000/accounts/login/', formData);
+  
+      if (response.status === 200) {
+        const data = response.data;
   
         // Assuming the server responds with an access token
         const accessToken = data.access;
   
-        // Set the access token in a cookie
-        document.cookie = `access_token=${accessToken}; path=/`;
-
+        // Set the access token in a secure cookie
+        setAccessTokenCookie(accessToken);
+  
         const user = {
           id: '5e86809283e28b96d2d38537',
           avatar: '/assets/avatars/avatar-anika-visser.png',
-          name: data.first_name +' '+data.last_name,
-          email: data.email
+          name: data.first_name + ' ' + data.last_name,
+          email: data.email,
         };
+  
         dispatch({
           type: HANDLERS.SIGN_IN,
-          payload: user
+          payload: user,
         });
-
-
+  
         try {
           window.sessionStorage.setItem('authenticated', 'true');
         } catch (err) {
@@ -177,10 +176,6 @@ export const AuthProvider = (props) => {
       helpers.setErrors({ submit: err.message });
       helpers.setSubmitting(false);
     }
-  
-
-
-   
   };
 
   const signUp = async (email, name, password) => {
