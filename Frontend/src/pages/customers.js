@@ -68,7 +68,7 @@ const companies = [
 
 const Page = () => {
   const [shopItems, setShopItems] = useState(null);
-  
+
 
   useEffect(
     ()=>{
@@ -79,6 +79,7 @@ const Page = () => {
 
       if (response.ok) {
         const data = response.json();
+        
       }
     }
   )
