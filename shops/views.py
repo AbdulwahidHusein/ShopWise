@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.db import IntegrityError
 from custom_permissions import IsUserShopOwner
+from items.serializers import ItemSerializer
 
 class ShopViewSet(viewsets.ModelViewSet):
     serializer_class = ShopSerializer
@@ -35,7 +36,17 @@ class ShopViewSet(viewsets.ModelViewSet):
             return Response("first create seller profile before creating a shop")
     def get_queryset(self):
         user_id = self.request.user.id
-        return Shop.objects.filter(seller__id=user_id)
+        return Shop.objects.filter(seller__profile__id = user_id)
+    
+    @action(detail=False, methods=['GET'])
+    def get_all_items(self, request):
+        user_id = self.request.user.id
+        shop = Shop.objects.filter(seller__profile__id=user_id).first()
+        if not shop:
+            return Response("you does not have a shop")
+        items = shop.shop_items.all()
+        serializer = ItemSerializer(items, many=True)
+        return Response(serializer.data)
     
     
     

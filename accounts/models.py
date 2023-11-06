@@ -32,11 +32,14 @@ class CustomUser(AbstractUser):
     def __str__(self) -> str:
         if self.first_name:
             return self.first_name
-        return self.email
+        return self.username
 
 class Seller(models.Model):
     profile = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     card_info = models.CharField(max_length=200, null=True, blank=True)
+    
+    def __str__(self) -> str:
+        return self.profile.username
 
 class Buyer(models.Model):
     profile = models.ForeignKey(CustomUser, on_delete=models.PROTECT)
