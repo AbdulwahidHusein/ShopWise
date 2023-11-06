@@ -68,6 +68,7 @@ const companies = [
 
 const Page = () => {
   const [shopItems, setShopItems] = useState(null);
+  
 
   useEffect(
     ()=>{
