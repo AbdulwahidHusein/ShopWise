@@ -178,8 +178,39 @@ export const AuthProvider = (props) => {
     }
   };
 
-  const signUp = async (email, name, password) => {
-    throw new Error('Sign up is not implemented');
+  const signUp = async (values, helpers) => {
+    try {
+      const formData = new FormData();
+      formData.append('username', values.email);
+      formData.append('first_name', values.first_name);
+      formData.append('middle_name', values.middle_name);
+      formData.append('last_name', values.last_name);
+      formData.append('address', values.address);
+      formData.append('password', values.password);
+  
+      const response = await axios.post('http://127.0.0.1:8000/accounts/register/', formData);
+  
+      if (response.status === 200) {
+        const data = response.data;
+
+        const accessToken = data.access;
+        // Set the access token in a secure cookie
+        setAccessTokenCookie(accessToken);  
+        try {
+          window.sessionStorage.setItem('authenticated', 'true');
+        } catch (err) {
+          console.error(err);
+        }
+      } else {
+        // Handle non-successful response, e.g., display an error message
+        console.error('Registration failed');
+      }
+    } catch (error) {
+      console.error('An error occurred while registering:', error);
+      helpers.setStatus({ success: false });
+      helpers.setErrors({ submit: error.message });
+      helpers.setSubmitting(false);
+    }
   };
 
   const signOut = () => {

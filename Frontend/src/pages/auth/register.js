@@ -41,39 +41,12 @@ const Page = () => {
         .required('Password is required'),
     }),
     onSubmit: async (values, helpers) => {
-      try {
-        const formData = new FormData();
-        formData.append('username', values.email);
-        formData.append('first_name', values.first_name);
-        formData.append('middle_name', values.middle_name);
-        formData.append('last_name', values.last_name);
-        formData.append('address', values.address);
-        formData.append('password', values.password);
-    
-        const response = await fetch('http://127.0.0.1:8000/accounts/register/', {
-          method: 'POST',
-          body: formData,
-        });
-    
-        if (response.ok) {
-          const data = await response.json();
-    
-          // Assuming the server responds with an access token
-          const accessToken = data.accessToken;
-    
-          // Set the access token in a cookie
-          document.cookie = `access_token=${accessToken}; path=/`;
-    
-          router.push('/'); // Redirect to a new page or perform other actions as needed
-        } else {
-          // Handle non-successful response, e.g., display an error message
-          console.error('Registration failed');
-        }
-      } catch (error) {
-        console.error('An error occurred while registering:', error);
-        helpers.setStatus({ success: false });
-        helpers.setErrors({ submit: error.message });
-        helpers.setSubmitting(false);
+      try{
+          await auth.signUp(values, helpers);
+          router.push('/');
+      }
+      catch(err){
+        console.log(err);
       }
     }
     

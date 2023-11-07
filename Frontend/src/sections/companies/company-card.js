@@ -4,7 +4,7 @@ import ClockIcon from '@heroicons/react/24/solid/ClockIcon';
 import { Avatar, Box, Card, CardContent, Divider, Stack, SvgIcon, Typography } from '@mui/material';
 
 export const CompanyCard = (props) => {
-  const { company } = props;
+  const { item } = props;
 
   return (
     <Card
@@ -21,24 +21,30 @@ export const CompanyCard = (props) => {
             justifyContent: 'center',
             pb: 3
           }}
-        >
+        >{item.images[0] &&
           <Avatar
-            src={company.logo}
-            variant="square"
-          />
+          src={"http://127.0.0.1:8000"+item.images[0].image}
+          variant="square"
+          sx={{
+            width: '100%', // Adjust the width as needed
+            height: 'auto' // Preserve the aspect ratio
+          }}
+        />
+        }
+         
         </Box>
         <Typography
           align="center"
           gutterBottom
           variant="h5"
         >
-          {company.title}
+          {item.title}
         </Typography>
         <Typography
           align="center"
           variant="body1"
         >
-          {company.description}
+          {item.description}
         </Typography>
       </CardContent>
       <Box sx={{ flexGrow: 1 }} />
@@ -68,6 +74,13 @@ export const CompanyCard = (props) => {
           >
             Added 2hr ago
           </Typography>
+          <Typography
+            color="text.secondary"
+            display="inline"
+            variant="body2"
+          >
+            {item.status}
+          </Typography>
         </Stack>
         <Stack
           alignItems="center"
@@ -85,7 +98,7 @@ export const CompanyCard = (props) => {
             display="inline"
             variant="body2"
           >
-            {company.downloads} Adds
+            {item.price} Birr
           </Typography>
         </Stack>
       </Stack>
@@ -94,5 +107,5 @@ export const CompanyCard = (props) => {
 };
 
 CompanyCard.propTypes = {
-  company: PropTypes.object.isRequired
+  item: PropTypes.object.isRequired
 };
