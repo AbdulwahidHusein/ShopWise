@@ -124,8 +124,13 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=70),     # Extend refresh token lifetime
 
 }
+import os
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 AUTH_USER_MODEL = 'accounts.CustomUser'
