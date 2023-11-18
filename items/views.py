@@ -38,4 +38,4 @@ class ItemView(viewsets.ModelViewSet):
     
     @action(detail=False, methods=["GET"])
     def get_all_items(self):
-        pass
+        return Item.objects.all()
