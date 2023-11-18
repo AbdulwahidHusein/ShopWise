@@ -2,10 +2,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from .models import CustomUser
 from .serializers import CustomUserSerializer, CustomUserLoginSerializer, CustomUserRegistrationSerializer
-# Create your views here.
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import permissions
 from rest_framework.decorators import action
@@ -13,7 +10,7 @@ from rest_framework.decorators import action
 class CustomUserView(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
-    
+from django.db import transaction   
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -32,7 +29,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
             return CustomUserRegistrationSerializer
         else:
             return CustomUserSerializer
-        
+    @transaction.atomic
     @action(detail=False, methods=['post'])
     def login(self, request):
         serializer = CustomUserLoginSerializer(data=request.data)
@@ -48,7 +45,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
             'last_name':user.last_name,
             'email':user.username,
         })
-
+    @transaction.atomic
     @action(detail=False, methods=['post'])
     def register(self, request):
         serializer = CustomUserRegistrationSerializer(data=request.data)
@@ -61,6 +58,6 @@ class CustomUserViewSet(viewsets.ModelViewSet):
             'refresh': str(refresh),
             'access': str(refresh.access_token),
         })
-
+    @transaction.atomic
     def perform_create(self, serializer):
         user = serializer.save()

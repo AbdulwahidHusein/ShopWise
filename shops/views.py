@@ -10,6 +10,7 @@ from rest_framework.decorators import action
 from django.db import IntegrityError
 from custom_permissions import IsUserShopOwner
 from items.serializers import ItemSerializer
+from django.db import transaction
 
 class ShopViewSet(viewsets.ModelViewSet):
     serializer_class = ShopSerializer
@@ -23,15 +24,16 @@ class ShopViewSet(viewsets.ModelViewSet):
             # Allow only the item creator to delete, update, or partially update the item
             permission_classes.append(IsUserShopOwner)
         return [permission() for permission in permission_classes]
-    
+    @transaction.atomic
     def perform_create(self, serializer):
         user = self.request.user
         try:
-            seller = Seller.objects.get(profile=user)
-            try:
-                serializer.save(seller=seller)
-            except IntegrityError:
-                return Response("you already have a shop opened")
+            with transaction.atomic():
+                seller = Seller.objects.select_for_update.get(profile=user)
+                try:
+                    serializer.save(seller=seller)
+                except IntegrityError:
+                    return Response("you already have a shop opened")
         except ObjectDoesNotExist:
             return Response("first create seller profile before creating a shop")
     def get_queryset(self):
