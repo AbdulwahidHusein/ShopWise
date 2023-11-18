@@ -37,5 +37,7 @@ class ItemView(viewsets.ModelViewSet):
         return Item.objects.filter(shop__seller__id=user_id)
     
     @action(detail=False, methods=["GET"])
-    def get_all_items(self):
-        return Item.objects.all()
+    def get_all_items(self, request):
+        items = Item.objects.all()
+        serializer = ItemSerializer(items, many=True)
+        return Response(serializer.data)
